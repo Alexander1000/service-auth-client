@@ -40,6 +40,14 @@ class Client
         return $response->getResult()['success'];
     }
 
+    public function authenticate(Request\V1\Authenticate $request)
+    {
+        $response = $this->executeRequest($request);
+        if ($response->isError()) {
+            throw new Exception($response->getErrorMessage(), $response->getErrorCode());
+        }
+    }
+
     /**
      * @param NetworkTransport\Http\Request\Data $requestData
      * @return Response

@@ -24,6 +24,11 @@ class Client
         $this->requestBuilder = $requestBuilder;
     }
 
+    public function registration()
+    {
+        // todo comming soon
+    }
+
     /**
      * @param NetworkTransport\Http\Request\Data $requestData
      * @return Response

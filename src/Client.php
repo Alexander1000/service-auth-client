@@ -40,12 +40,21 @@ class Client
         return $response->getResult()['success'];
     }
 
-    public function authenticate(Request\V1\Authenticate $request)
+    /**
+     * @param Request\V1\Authenticate $request
+     * @return Model\Token
+     * @throws Exception
+     * @throws NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    public function authenticate(Request\V1\Authenticate $request): Model\Token
     {
         $response = $this->executeRequest($request);
         if ($response->isError()) {
             throw new Exception($response->getErrorMessage(), $response->getErrorCode());
         }
+
+        $data = $response->getResult();
+        return new Model\Token($data['access_token'], $data['refresh_token']);
     }
 
     /**

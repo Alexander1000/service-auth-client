@@ -23,4 +23,34 @@ class Client
         $this->transport = $transport;
         $this->requestBuilder = $requestBuilder;
     }
+
+    /**
+     * @param NetworkTransport\Http\Request\Data $requestData
+     * @return Response
+     * @throws \Alexander1000\Clients\Auth\Exception
+     * @throws \NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    protected function executeRequest(NetworkTransport\Http\Request\Data $requestData): Response
+    {
+        $response = $this->transport->send(
+            new NetworkTransport\Http\Request($this->requestBuilder, $requestData)
+        );
+        if ($response->isError()) {
+            throw new Exception(
+                $response->getErrorMessage() ?? '',
+                $response->getErrorCode() ?? 500
+            );
+        }
+        $data = json_decode($response->getResponse() ?? '', true);
+        if (json_last_error()) {
+            throw new Exception('cannot parse response', 501);
+        }
+        $errCode = null;
+        $errMsg = null;
+        if (isset($data['error'])) {
+            $errCode = (int) $data['error']['code'];
+            $errMsg = $data['error']['message'];
+        }
+        return new Response($data['result'] ?? null, $errCode, $errMsg);
+    }
 }

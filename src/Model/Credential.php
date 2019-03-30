@@ -2,7 +2,7 @@
 
 namespace Alexander1000\Clients\Auth\Model;
 
-class Credential
+class Credential implements \JsonSerializable
 {
     /**
      * @var int
@@ -34,5 +34,16 @@ class Credential
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+        ];
     }
 }

@@ -24,9 +24,9 @@ class Client
         $this->requestBuilder = $requestBuilder;
     }
 
-    public function registration()
+    public function registration(Request\V1\Registration $request)
     {
-        // todo comming soon
+        $response = $this->executeRequest($request);
     }
 
     /**

@@ -57,6 +57,18 @@ class Client
         return new Model\Token($data['access_token'], $data['refresh_token']);
     }
 
+    public function authorise()
+    {
+    }
+
+    public function refresh()
+    {
+    }
+
+    public function logout()
+    {
+    }
+
     /**
      * @param NetworkTransport\Http\Request\Data $requestData
      * @return Response

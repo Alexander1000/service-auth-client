@@ -24,9 +24,20 @@ class Client
         $this->requestBuilder = $requestBuilder;
     }
 
-    public function registration(Request\V1\Registration $request)
+    /**
+     * @param Request\V1\Registration $request
+     * @return bool
+     * @throws Exception
+     * @throws NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    public function registration(Request\V1\Registration $request): bool
     {
         $response = $this->executeRequest($request);
+        if ($response->isError()) {
+            throw new Exception($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        return $response->getResult()['success'];
     }
 
     /**

@@ -73,12 +73,37 @@ class Client
         return $response->getResult()['success'];
     }
 
-    public function refresh()
+    /**
+     * @param Request\V1\Refresh $request
+     * @return Model\Token
+     * @throws Exception
+     * @throws NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    public function refresh(Request\V1\Refresh $request): Model\Token
     {
+        $response = $this->executeRequest($request);
+        if ($response->isError()) {
+            throw new Exception($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        $data = $response->getResult();
+        return new Model\Token($data['access_token'], $data['refresh_token']);
     }
 
-    public function logout()
+    /**
+     * @param Request\V1\Logout $request
+     * @return bool
+     * @throws Exception
+     * @throws NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    public function logout(Request\V1\Logout $request): bool
     {
+        $response = $this->executeRequest($request);
+        if ($response->isError()) {
+            throw new Exception($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        return $response->getResult()['success'];
     }
 
     /**

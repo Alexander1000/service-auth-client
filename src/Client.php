@@ -57,8 +57,20 @@ class Client
         return new Model\Token($data['access_token'], $data['refresh_token']);
     }
 
-    public function authorise()
+    /**
+     * @param Request\V1\Authorize $request
+     * @return bool
+     * @throws Exception
+     * @throws NetworkTransport\Http\Exception\MethodNotAllowed
+     */
+    public function authorize(Request\V1\Authorize $request): bool
     {
+        $response = $this->executeRequest($request);
+        if ($response->isError()) {
+            throw new Exception($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        return $response->getResult()['success'];
     }
 
     public function refresh()
